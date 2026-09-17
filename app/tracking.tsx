@@ -64,7 +64,7 @@ export default function TrackingScreen() {
 
         setItineraryPlaces([testPlace]);
 
-        console.log("🧪 TEST MODE: Stop moved to current location");
+        console.log(" TEST MODE: Stop moved to current location");
       } else {
         setItineraryPlaces(parsedPlaces);
       }

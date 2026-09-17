@@ -60,7 +60,7 @@ export default function ResultsScreen() {
       },
 
       onPanResponderGrant: () => {
-        // Remember where the sheet was when the finger touched it
+        // for remembering where the sheet was when the finger touched it
         startY.current = (sheetY as any).__getValue();
       },
 
@@ -88,13 +88,13 @@ export default function ResultsScreen() {
         let finalPosition;
 
         if (gestureState.vy < -0.5) {
-          // Fast swipe upward
+          // Fast swipe towards up
           finalPosition = expandedPosition;
         } else if (gestureState.vy > 0.5) {
-          // Fast swipe downward
+          // Fast swipe towards down
           finalPosition = collapsedPosition;
         } else {
-          // Otherwise snap to whichever position is closer
+          // else snap to whichever position is closer
           finalPosition =
             currentY < midpoint ? expandedPosition : collapsedPosition;
         }
@@ -195,9 +195,7 @@ export default function ResultsScreen() {
       ),
     };
 
-    // -----------------------------------
     // RECALCULATE ROUTE
-    // -----------------------------------
 
     let currentLat = location.coords.latitude;
 
@@ -234,9 +232,7 @@ export default function ResultsScreen() {
 
     const availableTime = Number(time);
 
-    // -----------------------------------
     // CALCULATE EXTRA TIME
-    // -----------------------------------
 
     const currentTotalTime = totalTravelTime + totalVisitTime;
 
@@ -244,9 +240,7 @@ export default function ResultsScreen() {
 
     extraTime = Math.max(0, extraTime);
 
-    // -----------------------------------
     // REDISTRIBUTE EXTRA TIME
-    // -----------------------------------
 
     let remainingExtraTime = extraTime;
 
@@ -262,7 +256,7 @@ export default function ResultsScreen() {
 
         const place = finalPlaces[i];
 
-        // Maximum sensible visit time
+        // Maximum visit time
         let maxVisitTime = 30;
 
         if (place.tags?.amenity === "cafe") {
@@ -297,9 +291,7 @@ export default function ResultsScreen() {
       }
     }
 
-    // -----------------------------------
     // FINAL TOTAL
-    // -----------------------------------
 
     const finalTotalTime = finalPlaces.reduce(
       (total: number, place: any) => total + place.travelTime + place.visitTime,
@@ -308,9 +300,7 @@ export default function ResultsScreen() {
 
     const finalRemainingTime = availableTime - finalTotalTime;
 
-    // -----------------------------------
     // UPDATE ITINERARY
-    // -----------------------------------
 
     setItinerary({
       ...itinerary,
@@ -396,9 +386,7 @@ export default function ResultsScreen() {
 
     extraTime = Math.max(0, extraTime);
 
-    // -----------------------------------
     // REDISTRIBUTE EXTRA TIME
-    // -----------------------------------
 
     let remainingExtraTime = extraTime;
 

@@ -18,7 +18,7 @@ export async function scheduleTripNotifications(timeBudget: number) {
     return;
   }
 
-  // Cancel any old trip notifications first
+  // Cancels any old trip notifications first
   await Notifications.cancelAllScheduledNotificationsAsync();
 
   const notifications: {
@@ -27,7 +27,7 @@ export async function scheduleTripNotifications(timeBudget: number) {
     body: string;
   }[] = [];
 
-  // Decide which reminders to send
+  // for deciding which reminders to send
   if (timeBudget >= 60) {
     notifications.push({
       minutesBeforeEnd: 20,
@@ -86,8 +86,8 @@ export async function scheduleTripNotifications(timeBudget: number) {
 
   // Schedule each notification
   for (const notification of notifications) {
-    //const secondsFromNow = (timeBudget - notification.minutesBeforeEnd) * 60;
-    const secondsFromNow = notifications.indexOf(notification) * 10 + 10;
+    const secondsFromNow = (timeBudget - notification.minutesBeforeEnd) * 60;
+    //const secondsFromNow = notifications.indexOf(notification) * 10 + 10; used during testing purpose
     if (secondsFromNow > 0) {
       await Notifications.scheduleNotificationAsync({
         content: {

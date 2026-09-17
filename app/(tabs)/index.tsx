@@ -110,15 +110,6 @@ export default function HomeScreen() {
         </View>
         <Text style={styles.timeText}>{time} minutes</Text>
 
-        {/* Fake Slider - We will make it functional later 
-        <View style={styles.sliderContainer}>
-          <View style={styles.sliderTrack} />
-
-          <View style={styles.sliderProgress} />
-
-          <View style={styles.sliderCircle} />
-        </View>*/}
-
         <Slider
           style={styles.timeSlider}
           minimumValue={15}
@@ -282,9 +273,7 @@ export default function HomeScreen() {
   );
 }
 
-/* ================================================= */
-/* Vibe Card Component                               */
-/* ================================================= */
+/* Vibe Card Component */
 
 type VibeCardProps = {
   id: string;
@@ -331,9 +320,7 @@ function CustomOption({ title, selected, onPress }: CustomOptionProps) {
   );
 }
 
-/* ================================================= */
-/* Transportation Card Component                    */
-/* ================================================= */
+/* Transportation Card Component */
 
 type TransportCardProps = {
   icon: string;
@@ -355,19 +342,17 @@ function TransportCard({ icon, title, selected, onPress }: TransportCardProps) {
   );
 }
 
-/* ================================================= */
-/* Styles                                            */
-/* ================================================= */
+/* Styles */
 
 const styles = StyleSheet.create({
-  /* ---------- Screen ---------- */
+  /*Screen*/
 
   screen: {
     flex: 1,
     backgroundColor: "#EAF6FB",
   },
 
-  /* ---------- Header ---------- */
+  /*Header  */
 
   header: {
     height: 60,
@@ -402,7 +387,7 @@ const styles = StyleSheet.create({
     color: "#173F5F",
     fontWeight: "700",
   },
-  /* ---------- App Title ---------- */
+  /* App Title */
 
   titleContainer: {
     paddingHorizontal: 20,
@@ -422,7 +407,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  /* ---------- Sections ---------- */
+  /* Sections */
 
   section: {
     paddingHorizontal: 20,
@@ -447,7 +432,7 @@ const styles = StyleSheet.create({
     color: "#394B59",
   },
 
-  /* ---------- Slider ---------- */
+  /* Slider */
 
   sliderContainer: {
     height: 5,
@@ -455,40 +440,13 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 
-  /*sliderTrack: {
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: "#C9DDE5",
-    width: "100%",
-  },*/
-
-  /* sliderProgress: {
-    position: "absolute",
-    left: 0,
-    height: 5,
-    width: "75%",
-    borderRadius: 5,
-    backgroundColor: "#173F5F",
-  },
-
-  sliderCircle: {
-    position: "absolute",
-    left: "72%",
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: "#173F5F",
-  },*/
-
   timeLabels: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 2,
   },
 
-  /* ---------- Vibe Cards ---------- */
+  /* Vibe Cards */
 
   vibeGrid: {
     flexDirection: "row",
@@ -534,7 +492,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E1F1F7",
   },
 
-  /* ---------- Transportation ---------- */
+  /* Transportation  */
 
   transportContainer: {
     flexDirection: "row",
@@ -570,7 +528,7 @@ const styles = StyleSheet.create({
     color: "#243746",
   },
 
-  /* ---------- Plan Button ---------- */
+  /*  Plan Button  */
 
   planButton: {
     marginHorizontal: 20,

@@ -177,10 +177,7 @@ export function buildItinerary(
 
       const vibeScore = scorePlace(place, vibes, selectedCategories);
 
-      /*
-       * Give a small bonus to places that use
-       * more of the remaining available time.
-       */
+      /* Give a small bonus to places that usemore of the remaining available time.*/
       const timeUsageScore = requiredTime / remainingTime;
 
       const score = vibeScore + timeUsageScore * 5;

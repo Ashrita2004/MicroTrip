@@ -63,18 +63,12 @@ The application discovers nearby places, calculates travel and estimated visit t
 ## Example
 
 A user has:
-
-Available time: 45 minutes
-
-Vibes: Coffee + Park
-
-Mood: Relaxing
-
-Preference: Less crowded
-
-Transport: Walking
-
-Buffer: Enabled
+- Available time: 45 minutes
+- Vibes: Coffee + Park
+- Mood: Relaxing
+- Preference: Less crowded
+- Transport: Walking
+- Buffer: Enabled
 
 
 MicroTrip then:

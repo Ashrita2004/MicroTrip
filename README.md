@@ -2,7 +2,7 @@
 
 **Have little time? Don't know where to go?**
 
-We've all had those moments — a free hour between work, before heading home, or while waiting for someone, but no clear idea what to do with it.
+We've all had those moments like a free hour between work, before heading home, or while waiting for someone, but no clear idea what to do with it.
 
 What if an app could simply ask **how much time you have, what you're in the mood for, and how you want to travel**, and then create a realistic mini-itinerary around it?
 
@@ -33,14 +33,14 @@ Current Location
     ↓
 Nearby POI Discovery
     ↓
-Distance & Travel-Time Estimation
+Distance & Travel Time Estimation
     ↓
-Visit-Time Estimation
+Visit Time Estimation
     ↓
 Location Scoring
     ↓
 Greedy Itinerary Selection
     ↓
-Time-Constrained Itinerary
+Time Constrained Itinerary
     ↓
 Map, Tracking & Notifications

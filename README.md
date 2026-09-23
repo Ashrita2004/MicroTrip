@@ -44,3 +44,82 @@ Greedy Itinerary Selection
 Time Constrained Itinerary
     ↓
 Map, Tracking & Notifications
+
+## How It Works
+
+The user provides:
+
+- Available time
+- Interests / vibes
+- Mood
+- Preferences
+- Transport mode
+- Buffer preference
+
+The application discovers nearby places, calculates travel and estimated visit times, scores feasible locations, and iteratively selects the highest-scoring option while respecting the available time.
+
+## Example
+
+A user has:
+
+```text
+Available time: 45 minutes
+Vibes: Coffee + Park
+Mood: Relaxing
+Preference: Less crowded
+Transport: Walking
+Buffer: Enabled
+```
+
+MicroTrip then:
+
+1. Gets the user's current location
+2. Discovers nearby relevant places
+3. Calculates approximate travel times
+4. Estimates visit duration
+5. Filters locations that do not fit the time constraint
+6. Scores the feasible locations
+7. Builds an ordered itinerary
+8. Displays the itinerary on the map
+9. Tracks the user's trip
+10. Sends return-time notifications
+
+## Maps and Location Services
+
+MicroTrip does not require a Google Maps API key. It uses open and publicly available services:
+
+| Service | Purpose |
+|---------|---------|
+| [OpenStreetMap](https://www.openstreetmap.org/) | Map and geographic data |
+| [Leaflet](https://leafletjs.com/) | Interactive map rendering |
+| [Overpass API](https://overpass-api.de/) | Nearby POI discovery |
+| [OSRM](https://project-osrm.org/) | Route and travel-time information |
+| Device GPS | Current location |
+
+## Tech Stack
+
+### Frontend
+
+- React Native
+- Expo
+- TypeScript
+- Expo Router
+
+### Maps and Location
+
+- OpenStreetMap
+- Leaflet
+- React Native WebView
+- Overpass API
+- OSRM
+
+### Storage and Notifications
+
+- AsyncStorage
+- Expo Notifications
+
+### Android
+
+- React Native Android
+- Expo SDK
+- Android Gradle build system

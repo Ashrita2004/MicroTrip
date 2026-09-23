@@ -15,7 +15,7 @@ What if an app could simply ask **how much time you have, what you're in the moo
 - **Time aware itinerary planning** based on available time
 - **Nearby place discovery** using real world map data
 - **Greedy, score based itinerary selection algorithm** that ranks locations based on vibe match, proximity, travel time, visit duration and available time, then selects the highest scoring feasible place
-- **Route and travel-time estimation** using OSRM
+- **Route and travel time estimation** using OSRM
 - **Live trip tracking** with real time location updates
 - **Return time notifications** to help users stay on schedule
 - **Save and reuse previous trip plans**
@@ -57,12 +57,13 @@ The user provides:
 - Buffer preference
 
 The application discovers nearby places, calculates travel and estimated visit times, scores feasible locations, and iteratively selects the highest scoring option while respecting the available time.
+```text
+```
 
 ## Example
 
 A user has:
 
-```text
 Available time: 45 minutes
 Vibes: Coffee + Park
 Mood: Relaxing

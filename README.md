@@ -120,6 +120,14 @@ MicroTrip does not require a Google Maps API key. It uses open and publicly avai
 
 I hope you enjoy using MicroTrip! I'd love to hear your feedback and suggestions.
 
+---
+
+## Known Limitations
+
+- Nearby place discovery relies on the Overpass API and may occasionally fail during periods of high API traffic. Restarting the app and trying again usually resolves the issue.
+
+---
+
 **Note:** The APK is not distributed through the Play Store. Your device may show a security warning when installing from outside the Play Store. Only download the APK from this repository's official Releases page.
 
 MicroTrip is currently optimized for Android. It may not work properly on iOS devices at the moment. iOS support is currently in progress.

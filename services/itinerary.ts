@@ -21,7 +21,6 @@ function scorePlace(
 
   const category = getPlaceCategory(place);
 
-  // Give a strong score when the place matches a requested vibe
   if (vibes.includes("coffee") && amenity === "cafe") {
     score += selectedCategories.includes("coffee") ? 5 : 20;
   }
@@ -38,12 +37,10 @@ function scorePlace(
     score += selectedCategories.includes("attraction") ? 5 : 20;
   }
 
-  // Prefer categories that haven't been selected yet
   if (!selectedCategories.includes(category)) {
     score += 10;
   }
 
-  // Small distance penalty
   score -= place.distance;
 
   return score;
@@ -57,7 +54,6 @@ function getPlaceCategory(place: EnrichedPlace) {
   if (place.tags?.leisure === "park") {
     return "park";
   }
-
   if (place.tags?.tourism === "museum") {
     return "gallery";
   }
@@ -170,14 +166,14 @@ export function buildItinerary(
 
       const requiredTime = travelTime + place.visitTime;
 
-      // Ignore places that don't fit
+      // for ignoring places that don't fit
       if (requiredTime > remainingTime) {
         continue;
       }
 
       const vibeScore = scorePlace(place, vibes, selectedCategories);
 
-      /* Give a small bonus to places that usemore of the remaining available time.*/
+      /* Give a small bonus to places that use more of the remaining available time.*/
       const timeUsageScore = requiredTime / remainingTime;
 
       const score = vibeScore + timeUsageScore * 5;

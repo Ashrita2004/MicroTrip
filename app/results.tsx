@@ -178,10 +178,10 @@ export default function ResultsScreen() {
 
     const index = replaceIndex;
 
-    // Create a copy of the current itinerary
+    // Creates a copy of the current itinerary
     const updatedPlaces = [...itinerary.places];
 
-    // Replace the selected stop
+    // it replaces the selected stop
     updatedPlaces[index] = {
       ...newPlace,
       visitTime: getVisitTime(
@@ -195,7 +195,7 @@ export default function ResultsScreen() {
       ),
     };
 
-    // RECALCULATE ROUTE
+    // for route recalculation
 
     let currentLat = location.coords.latitude;
 
@@ -232,15 +232,14 @@ export default function ResultsScreen() {
 
     const availableTime = Number(time);
 
-    // CALCULATE EXTRA TIME
-
+    // calculates extra time
     const currentTotalTime = totalTravelTime + totalVisitTime;
 
     let extraTime = availableTime - currentTotalTime;
 
     extraTime = Math.max(0, extraTime);
 
-    // REDISTRIBUTE EXTRA TIME
+    // redistributes extra time
 
     let remainingExtraTime = extraTime;
 
@@ -285,13 +284,11 @@ export default function ResultsScreen() {
         }
       }
 
-      // Safety guard
+      // Safety purpose
       if (!timeAdded) {
         break;
       }
     }
-
-    // FINAL TOTAL
 
     const finalTotalTime = finalPlaces.reduce(
       (total: number, place: any) => total + place.travelTime + place.visitTime,
@@ -299,8 +296,6 @@ export default function ResultsScreen() {
     );
 
     const finalRemainingTime = availableTime - finalTotalTime;
-
-    // UPDATE ITINERARY
 
     setItinerary({
       ...itinerary,
@@ -317,14 +312,14 @@ export default function ResultsScreen() {
 
     console.log("Remaining time:", finalRemainingTime, "minutes");
 
-    // Close replacement panel
+    // for closing replacement panel
     setReplaceIndex(null);
   };
 
   const removeStop = (index: number) => {
     if (!itinerary || !location) return;
 
-    // Remove selected stop
+    // Removes selected stop
     const updatedPlaces = itinerary.places.filter(
       (_place: any, placeIndex: number) => placeIndex !== index,
     );
@@ -342,7 +337,7 @@ export default function ResultsScreen() {
       return;
     }
 
-    // Start from user's location
+    // Start from my location
     let currentLat = location.coords.latitude;
     let currentLon = location.coords.longitude;
 
@@ -386,14 +381,11 @@ export default function ResultsScreen() {
 
     extraTime = Math.max(0, extraTime);
 
-    // REDISTRIBUTE EXTRA TIME
-
     let remainingExtraTime = extraTime;
 
     const finalPlaces = [...recalculatedPlaces];
 
-    // Give extra time in small chunks
-    // instead of giving everything to the first stop
+    // Give extra time in small chunks instead of giving everything to the first stop
     while (remainingExtraTime > 0) {
       let timeAdded = false;
 
@@ -431,13 +423,13 @@ export default function ResultsScreen() {
         }
       }
 
-      // Prevent infinite loop
+      // for preventing infinite loop
       if (!timeAdded) {
         break;
       }
     }
 
-    // Calculate final total
+    // Calculates final total
     const finalTotalTime = finalPlaces.reduce(
       (total: number, place: any) => total + place.travelTime + place.visitTime,
       0,
@@ -614,7 +606,6 @@ export default function ResultsScreen() {
 `;
   return (
     <View style={styles.container}>
-      {/* MAP - 60% */}
       <View style={styles.mapContainer}>
         {location ? (
           <WebView
@@ -630,8 +621,6 @@ export default function ResultsScreen() {
           </View>
         )}
       </View>
-
-      {/* TRIP DETAILS - 40% */}
       <Animated.View
         style={[
           styles.detailsContainer,
@@ -648,7 +637,7 @@ export default function ResultsScreen() {
           contentContainerStyle={styles.detailsContentContainer}
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.title}>✨ Your Local Hour</Text>
+          <Text style={styles.title}>Your Personalized Local Planner</Text>
 
           <Text style={styles.subtitle}>
             {time} min · {transport}
@@ -666,7 +655,7 @@ export default function ResultsScreen() {
               </Text>
 
               <Text style={styles.warningHint}>
-                💡 Try biking or increasing your available time.
+                💡 Try different transport or increase your available time.
               </Text>
             </View>
           )}
@@ -723,7 +712,7 @@ export default function ResultsScreen() {
                   style={styles.removeButton}
                   onPress={() => removeStop(index)}
                 >
-                  <Text style={styles.removeButtonText}>🗑 Remove</Text>
+                  <Text style={styles.removeButtonText}> Remove</Text>
                 </Pressable>
               </View>
             </View>

@@ -8,6 +8,7 @@ export type Place = {
     tourism?: string;
     leisure?: string;
     cuisine?: string;
+    shop?: string;
   };
 };
 export async function getNearbyPlaces(

@@ -3,6 +3,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   Alert,
+  AppState,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -22,8 +23,14 @@ export default function TrackingScreen() {
   const TEST_MODE = false;
   const { totalTime, transport, places } = useLocalSearchParams();
 
+  const totalTimeMinutes = Number(totalTime) || 30;
+
+  const [tripEndTime, setTripEndTime] = useState(
+    Date.now() + totalTimeMinutes * 60 * 1000,
+  );
+
   const [remainingSeconds, setRemainingSeconds] = useState(
-    (Number(totalTime) || 30) * 60, //How much time is left for the entire Local Hour?
+    totalTimeMinutes * 60,
   );
 
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -40,6 +47,8 @@ export default function TrackingScreen() {
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [arrivedAtStop, setArrivedAtStop] = useState(false);
   const [itineraryPlaces, setItineraryPlaces] = useState<any[]>([]);
+  const [showTimeEnded, setShowTimeEnded] = useState(false);
+  const [showTripTimeEnded, setShowTripTimeEnded] = useState(false);
   const [tripStatus, setTripStatus] = useState<
     "travelling" | "visiting" | "completed"
   >("travelling");
@@ -73,27 +82,58 @@ export default function TrackingScreen() {
     }
   }, [places, location]);
 
-  //  Schedule Local Hour notifications
+  //  it schedules Local Hour notifications
   useEffect(() => {
-    const timeBudget = Number(totalTime) || 30;
+    if (!tripEndTime) {
+      return;
+    }
 
-    scheduleTripNotifications(timeBudget);
-  }, [totalTime]);
+    scheduleTripNotifications(tripEndTime);
+  }, [tripEndTime]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setRemainingSeconds((previous) => {
-        if (previous <= 0) {
-          clearInterval(timer);
-          return 0;
-        }
+    const updateRemainingTime = () => {
+      const secondsLeft = Math.max(
+        0,
+        Math.floor((tripEndTime - Date.now()) / 1000),
+      );
 
-        return previous - 1;
-      });
-    }, 1000);
+      setRemainingSeconds(secondsLeft);
+    };
 
-    return () => clearInterval(timer);
-  }, []);
+    updateRemainingTime();
+
+    const timer = setInterval(updateRemainingTime, 1000);
+
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      if (nextState === "active") {
+        updateRemainingTime();
+      }
+    });
+
+    return () => {
+      clearInterval(timer);
+      subscription.remove();
+    };
+  }, [tripEndTime]);
+
+  useEffect(() => {
+    if (remainingSeconds > 0) {
+      return;
+    }
+
+    setShowTripTimeEnded(true);
+
+    const endTrip = async () => {
+      await cancelTripNotifications();
+
+      setTimeout(() => {
+        router.replace("/");
+      }, 2000);
+    };
+
+    endTrip();
+  }, [remainingSeconds]);
 
   useEffect(() => {
     if (tripStatus !== "visiting") {
@@ -104,6 +144,11 @@ export default function TrackingScreen() {
       setVisitRemainingSeconds((previous) => {
         if (previous <= 1) {
           clearInterval(timer);
+          setShowTimeEnded(true);
+          cancelTripNotifications();
+          setTimeout(() => {
+            router.replace("/");
+          }, 2000);
           return 0;
         }
 
@@ -381,7 +426,6 @@ export default function TrackingScreen() {
       ? itineraryPlaces[currentStopIndex]
       : null;
 
-  // 👇 PASTE THE NEW useEffect HERE
   useEffect(() => {
     if (
       !location ||
@@ -442,7 +486,6 @@ export default function TrackingScreen() {
       return;
     }
 
-    // There is another stop
     setCurrentStopIndex((previousIndex) => previousIndex + 1);
 
     setArrivedAtStop(false);
@@ -478,7 +521,7 @@ export default function TrackingScreen() {
             ? "🚶 TRAVELLING"
             : tripStatus === "visiting"
               ? "📍 VISITING"
-              : "✅ COMPLETED"}
+              : "COMPLETED"}
         </Text>
       </View>
 
@@ -493,15 +536,23 @@ export default function TrackingScreen() {
       <View style={styles.timerCircle}>
         <Text style={styles.timerLabel}>TIME REMAINING</Text>
 
-        <Text style={styles.timer}>
-          {minutes}:{seconds.toString().padStart(2, "0")}
-        </Text>
-        {tripStatus === "visiting" && (
-          <Text style={styles.visitTimer}>
-            Visit: {Math.floor(visitRemainingSeconds / 60)}:
-            {(visitRemainingSeconds % 60).toString().padStart(2, "0")}
+        {showTripTimeEnded ? (
+          <Text style={styles.timeEndedText}>Trip Time ended</Text>
+        ) : (
+          <Text style={styles.timer}>
+            {minutes}:{seconds.toString().padStart(2, "0")}
           </Text>
         )}
+
+        {tripStatus === "visiting" &&
+          (showTimeEnded ? (
+            <Text style={styles.timeEndedText}>Time ended</Text>
+          ) : (
+            <Text style={styles.visitTimer}>
+              Visit: {Math.floor(visitRemainingSeconds / 60)}:
+              {(visitRemainingSeconds % 60).toString().padStart(2, "0")}
+            </Text>
+          ))}
 
         <Text style={styles.transport}>{transportName}</Text>
       </View>
@@ -517,7 +568,7 @@ export default function TrackingScreen() {
 
         <Text style={styles.nextStopName}>
           {tripStatus === "completed"
-            ? "You've finished your Local Hour 🎉"
+            ? "You've finished your MicroTrip!!"
             : nextStop?.tags?.name || "No stops"}
         </Text>
 
@@ -573,7 +624,6 @@ export default function TrackingScreen() {
         </View>
       </View>
 
-      {/* COMPLETION CARD */}
       {tripStatus === "completed" && (
         <View style={styles.completionCard}>
           <Text style={styles.completionEmoji}>🎉</Text>
@@ -697,7 +747,7 @@ export default function TrackingScreen() {
 
       <View style={styles.warningCard}>
         <Text style={styles.warningTitle}>
-          {returnWarning ? "🚨 RETURN NOW" : "⚠️ RETURN ALERT"}
+          {returnWarning ? " RETURN NOW" : "⚠️ RETURN ALERT"}
         </Text>
 
         <Text style={styles.warningText}>
@@ -735,6 +785,7 @@ const styles = StyleSheet.create({
     color: "#173F5F",
     textAlign: "center",
     marginBottom: 15,
+    marginTop: 20,
   },
 
   timerCircle: {
@@ -951,5 +1002,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "800",
     letterSpacing: 1,
+  },
+  timeEndedText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#173F5F",
+    textAlign: "center",
+    marginTop: 8,
   },
 });

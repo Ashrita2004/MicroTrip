@@ -11,15 +11,17 @@ export async function requestNotificationPermission() {
   return true;
 }
 
-export async function scheduleTripNotifications(timeBudget: number) {
+export async function scheduleTripNotifications(tripEndTime: number) {
   const hasPermission = await requestNotificationPermission();
 
   if (!hasPermission) {
     return;
   }
 
-  // Cancels any old trip notifications first
+  // for removing notifications from any previous trip
   await Notifications.cancelAllScheduledNotificationsAsync();
+
+  const now = Date.now();
 
   const notifications: {
     minutesBeforeEnd: number;
@@ -27,12 +29,13 @@ export async function scheduleTripNotifications(timeBudget: number) {
     body: string;
   }[] = [];
 
-  // for deciding which reminders to send
-  if (timeBudget >= 60) {
+  const timeRemaining = Math.ceil((tripEndTime - now) / 60000);
+
+  if (timeRemaining >= 60) {
     notifications.push({
       minutesBeforeEnd: 20,
       title: "Return soon",
-      body: "You have 20 minutes left. Start wrapping up your Local Hour.",
+      body: "You have 20 minutes left. Can sit a little longer.",
     });
 
     notifications.push({
@@ -46,11 +49,11 @@ export async function scheduleTripNotifications(timeBudget: number) {
       title: "Return now",
       body: "Only 5 minutes left. Time to head back!",
     });
-  } else if (timeBudget >= 45) {
+  } else if (timeRemaining >= 45) {
     notifications.push({
       minutesBeforeEnd: 15,
       title: "Return soon",
-      body: "You have 15 minutes left. Start wrapping up your Local Hour.",
+      body: "You have 15 minutes left. Start wrapping up.",
     });
 
     notifications.push({
@@ -64,7 +67,7 @@ export async function scheduleTripNotifications(timeBudget: number) {
       title: "Return now",
       body: "Only 5 minutes left. Time to head back!",
     });
-  } else if (timeBudget >= 25) {
+  } else if (timeRemaining >= 25) {
     notifications.push({
       minutesBeforeEnd: 10,
       title: "Return soon",
@@ -76,7 +79,7 @@ export async function scheduleTripNotifications(timeBudget: number) {
       title: "Return now",
       body: "Only 5 minutes left. Time to head back!",
     });
-  } else {
+  } else if (timeRemaining > 5) {
     notifications.push({
       minutesBeforeEnd: 5,
       title: "Return now",
@@ -84,22 +87,29 @@ export async function scheduleTripNotifications(timeBudget: number) {
     });
   }
 
-  // Schedule each notification
   for (const notification of notifications) {
-    const secondsFromNow = (timeBudget - notification.minutesBeforeEnd) * 60;
-    //const secondsFromNow = notifications.indexOf(notification) * 10 + 10; used during testing purpose
-    if (secondsFromNow > 0) {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: `🔔 ${notification.title}`,
-          body: notification.body,
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: secondsFromNow,
-        },
-      });
+    const triggerTime = tripEndTime - notification.minutesBeforeEnd * 60 * 1000;
+
+    // Only schedule notifications that are still in the future
+    if (triggerTime <= Date.now()) {
+      continue;
     }
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: `${notification.title}`,
+        body: notification.body,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: new Date(triggerTime),
+      },
+    });
+
+    console.log(
+      `Scheduled ${notification.minutesBeforeEnd}-minute reminder for`,
+      new Date(triggerTime).toLocaleTimeString(),
+    );
   }
 
   console.log("Trip notifications scheduled.");

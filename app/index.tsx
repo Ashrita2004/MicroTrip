@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { useEffect } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function SplashScreen() {
   useEffect(() => {
@@ -18,6 +18,10 @@ export default function SplashScreen() {
         style={styles.logo}
         resizeMode="contain"
       />
+
+      <Text style={styles.createdBy}>Made with ♡ by Ashrita</Text>
+
+      <Text style={styles.copyright}>© 2026 AshritaLahon</Text>
     </View>
   );
 }
@@ -31,7 +35,21 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: "90%",
-    height: "90%",
+    width: "100%",
+    height: "100%",
+  },
+
+  createdBy: {
+    marginTop: -78,
+    fontSize: 13,
+    color: "#8A969C",
+    textAlign: "center",
+  },
+
+  copyright: {
+    marginTop: 5,
+    fontSize: 11,
+    color: "#A5AFB4",
+    textAlign: "center",
   },
 });

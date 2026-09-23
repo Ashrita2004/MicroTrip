@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const [transport, setTransport] = useState("walking");
 
   const [includeBuffer, setIncludeBuffer] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const [showCustomVibe, setShowCustomVibe] = useState(false);
 
@@ -81,16 +82,64 @@ export default function HomeScreen() {
     <ScrollView style={styles.screen}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.menuIcon}> </Text>
+        <Pressable
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(true)}
+        >
+          <Text style={styles.menuIcon}>☰</Text>
+        </Pressable>
 
-        <Text style={styles.headerTitle}>Home</Text>
+        <Text style={styles.headerTitle}> </Text>
 
         <Text style={styles.notificationIcon}> </Text>
       </View>
+      {menuVisible && (
+        <View style={styles.menuOverlay}>
+          <Pressable
+            style={styles.menuBackdrop}
+            onPress={() => setMenuVisible(false)}
+          />
+
+          <View style={styles.menuPanel}>
+            <Pressable
+              style={styles.menuCloseButton}
+              onPress={() => setMenuVisible(false)}
+            >
+              <Text style={styles.menuCloseText}>✕</Text>
+            </Pressable>
+
+            <Text style={styles.menuTitle}>Menu</Text>
+
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => {
+                setMenuVisible(false);
+                router.push("/about");
+              }}
+            >
+              <Text style={styles.menuItemText}>About MicroTrip</Text>
+            </Pressable>
+
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => {
+                setMenuVisible(false);
+                router.push("/previous-plans");
+              }}
+            >
+              <Text style={styles.menuItemText}>Previous Plans</Text>
+            </Pressable>
+
+            <View style={styles.menuDivider} />
+
+            <Text style={styles.menuCopyright}>© 2026 Ashrita Lahon</Text>
+          </View>
+        </View>
+      )}
 
       {/* App Title */}
       <View style={styles.titleContainer}>
-        <Text style={styles.appTitle}>Your Local Hour</Text>
+        <Text style={styles.appTitle}>Your Local Planner</Text>
 
         <Text style={styles.tagline}>Make the most of the time you have.</Text>
       </View>
@@ -99,12 +148,10 @@ export default function HomeScreen() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Available Time</Text>
-          {/* Buffer Section */}
-
           <Pressable onPress={() => setIncludeBuffer(!includeBuffer)}>
             <Text style={styles.bufferText}>
               {" "}
-              Buffer: {includeBuffer ? "ON" : "OFF"}
+              Buffer Time: {includeBuffer ? "ON" : "OFF"}
             </Text>
           </Pressable>
         </View>
@@ -123,13 +170,12 @@ export default function HomeScreen() {
         />
 
         <View style={styles.timeLabels}>
-          <Text style={styles.timeLabel}>15m</Text>
-          <Text style={styles.timeLabel}>60m</Text>
-          <Text style={styles.timeLabel}>120m</Text>
+          <Text style={styles.timeLabel}>15 mins</Text>
+          <Text style={styles.timeLabel}>1 hour</Text>
+          <Text style={styles.timeLabel}>2 hour</Text>
         </View>
       </View>
 
-      {/* Explore by Vibe */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Explore by Vibe</Text>
 
@@ -166,21 +212,18 @@ export default function HomeScreen() {
             onPress={() => toggleVibe("gallery")}
           />
         </View>
-        {/* Customise button */}
 
         <Pressable
           style={styles.customVibeButton}
           onPress={() => setShowCustomVibe(!showCustomVibe)}
         >
-          <Text style={styles.customVibeText}>＋ CUSTOMISE MY VIBE</Text>
+          <Text style={styles.customVibeText}>＋ CUSTOMISE YOUR VIBE</Text>
         </Pressable>
-
-        {/* Custom options */}
 
         {showCustomVibe && (
           <View style={styles.customVibeContainer}>
             <Text style={styles.customTitle}>What mood are you in?</Text>
-            {/* Mood options */}
+
             <View style={styles.optionRow}>
               <CustomOption
                 title="Relaxing"
@@ -210,7 +253,7 @@ export default function HomeScreen() {
             </View>
 
             <Text style={styles.customTitle}> What matters to you?</Text>
-            {/* Preference options */}
+
             <View style={styles.optionRow}>
               <CustomOption
                 title="Highly Rated"
@@ -228,7 +271,6 @@ export default function HomeScreen() {
         )}
       </View>
 
-      {/* Transportation */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Transportation</Text>
 
@@ -256,7 +298,6 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Plan Trip Button */}
       <Pressable style={styles.planButton} onPress={planTrip}>
         <Text style={styles.planButtonText}>PLAN MY TRIP</Text>
       </Pressable>
@@ -267,13 +308,10 @@ export default function HomeScreen() {
         <Text style={styles.previousPlansButtonText}>PREVIOUS PLANS</Text>
       </Pressable>
 
-      {/* Bottom spacing */}
       <View style={{ height: 30 }} />
     </ScrollView>
   );
 }
-
-/* Vibe Card Component */
 
 type VibeCardProps = {
   id: string;
@@ -320,8 +358,6 @@ function CustomOption({ title, selected, onPress }: CustomOptionProps) {
   );
 }
 
-/* Transportation Card Component */
-
 type TransportCardProps = {
   icon: string;
   title: string;
@@ -342,29 +378,101 @@ function TransportCard({ icon, title, selected, onPress }: TransportCardProps) {
   );
 }
 
-/* Styles */
-
 const styles = StyleSheet.create({
-  /*Screen*/
-
   screen: {
     flex: 1,
     backgroundColor: "#EAF6FB",
   },
-
-  /*Header  */
 
   header: {
     height: 60,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingHorizontal: 8,
     paddingTop: 40,
   },
 
+  menuButton: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   menuIcon: {
+    fontSize: 25,
+    color: "#173F5F",
+  },
+
+  menuOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 100,
+    flexDirection: "row",
+  },
+
+  menuBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
+  },
+
+  menuPanel: {
+    width: "75%",
+    backgroundColor: "#FFFFFF",
+    paddingTop: 60,
+    paddingHorizontal: 24,
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: -2,
+      height: 0,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+  },
+
+  menuCloseButton: {
+    alignSelf: "flex-end",
+    padding: 5,
+  },
+
+  menuCloseText: {
     fontSize: 22,
+    color: "#52636D",
+  },
+
+  menuTitle: {
+    fontSize: 26,
+    fontWeight: "700",
+    color: "#173F5F",
+    marginTop: 20,
+    marginBottom: 30,
+  },
+
+  menuItem: {
+    paddingVertical: 16,
+  },
+
+  menuItemText: {
+    fontSize: 17,
+    color: "#173F5F",
+    fontWeight: "600",
+  },
+
+  menuDivider: {
+    height: 1,
+    backgroundColor: "#E5ECEF",
+    marginVertical: 20,
+  },
+
+  menuCopyright: {
+    marginTop: 20,
+    fontSize: 12,
+    color: "#9AA6AB",
   },
 
   headerTitle: {
@@ -391,12 +499,12 @@ const styles = StyleSheet.create({
 
   titleContainer: {
     paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 20,
   },
 
   appTitle: {
-    fontSize: 32,
+    fontSize: 29,
     fontWeight: "700",
     color: "#12263A",
   },
@@ -406,8 +514,6 @@ const styles = StyleSheet.create({
     color: "#607080",
     marginTop: 5,
   },
-
-  /* Sections */
 
   section: {
     paddingHorizontal: 20,
@@ -432,8 +538,6 @@ const styles = StyleSheet.create({
     color: "#394B59",
   },
 
-  /* Slider */
-
   sliderContainer: {
     height: 5,
     justifyContent: "center",
@@ -445,8 +549,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 2,
   },
-
-  /* Vibe Cards */
 
   vibeGrid: {
     flexDirection: "row",
@@ -492,8 +594,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E1F1F7",
   },
 
-  /* Transportation  */
-
   transportContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -532,7 +632,9 @@ const styles = StyleSheet.create({
 
   planButton: {
     marginHorizontal: 20,
+    borderWidth: 1.5,
     backgroundColor: "#173F5F",
+    borderColor: "#FFFFFF",
     borderRadius: 14,
     paddingVertical: 17,
     alignItems: "center",
@@ -560,6 +662,15 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+
+    elevation: 3,
   },
 
   customVibeText: {
@@ -625,11 +736,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderWidth: 1.5,
     borderColor: "#173F5F",
+    backgroundColor: "rgb(255, 255, 255)",
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center",
     marginTop: 12,
     marginBottom: 30,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 5,
+
+    elevation: 3,
   },
 
   previousPlansButtonText: {

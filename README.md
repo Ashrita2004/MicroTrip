@@ -119,5 +119,7 @@ MicroTrip does not require a Google Maps API key. It uses open and publicly avai
 **[Download here](https://github.com/Ashrita2004/MicroTrip/releases/latest)**
 
 I hope you enjoy using MicroTrip! I'd love to hear your feedback and suggestions.
+
 **Note:** The APK is not distributed through the Play Store. Your device may show a security warning when installing from outside the Play Store. Only download the APK from this repository's official Releases page.
+
 MicroTrip is currently optimized for Android. It may not work properly on iOS devices at the moment. iOS support is currently in progress.

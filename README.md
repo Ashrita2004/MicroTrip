@@ -57,7 +57,7 @@ The user provides:
 - Buffer preference
 
 The application discovers nearby places, calculates travel and estimated visit times, scores feasible locations, and iteratively selects the highest scoring option while respecting the available time.
-```text
+```
 
 
 ## Example
@@ -70,7 +70,7 @@ Mood: Relaxing
 Preference: Less crowded
 Transport: Walking
 Buffer: Enabled
-```
+
 
 MicroTrip then:
 

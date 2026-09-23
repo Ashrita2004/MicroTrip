@@ -116,7 +116,7 @@ MicroTrip does not require a Google Maps API key. It uses open and publicly avai
 ---
 ## Download
 
-**[Download here](https://github.com/Ashrita2004/MicroTrip/releases/latest)**
+**[Download here](https://github.com/Ashrita2004/MicroTrip/releases/download/v1.0.0/app-release.apk)**
 
 I hope you enjoy using MicroTrip! I'd love to hear your feedback and suggestions.
 
